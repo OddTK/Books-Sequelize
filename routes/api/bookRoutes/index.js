@@ -24,6 +24,42 @@ router.get('/:bookId', async (req, res) => {
     }
 })
 
+// Updating
+router.patch('/:bookId', async (req, res) => {
+    const {
+        title,
+        author,
+        isbn,
+        pages,
+        edition,
+        isPaperback,
+    } = req.body;
+    try {
+        // update takes two params
+        // 1. what columns you want to update and what you want to update them to
+        // 2. an object for which rows you want to update
+        await Book.update(
+            {
+                title,
+                author,
+                isbn,
+                pages,
+                edition,
+                isPaperback,
+            },
+            {
+                where: {
+                    id: req.params.bookId
+                }
+            }
+            );
+            const updatedBook = await Book.findByPk(req.params.bookId);
+            res.json(updatedBook);
+    } catch (e) {
+        res.json(e);
+    }
+});
+
 router.post('/', async (req, res) => {
 const { title, author } = req.body;
 try {
@@ -38,6 +74,7 @@ try {
     res.json(e);
 }
 });
+
 // /api/books/seed
 router.post('/seed', async (req, res) => {
 const booksToSave = [
