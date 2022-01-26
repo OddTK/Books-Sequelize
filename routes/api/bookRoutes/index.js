@@ -53,7 +53,7 @@ router.patch('/:bookId', async (req, res) => {
                 }
             }
             );
-            const updatedBook = await Book.findByPk(req.params.bookId);
+            const updatedBook = await Book.findByPk(req.params.bookId)
             res.json(updatedBook);
     } catch (e) {
         res.json(e);
@@ -127,5 +127,21 @@ const booksToSave = [
         res.json(e);
     };
 });
+
+// DELETE ROUTE
+
+router.delete('/:bookId', async (req, res) => {
+    try {
+        // .destory takes one param which is an object
+        const deletedBook =  Book.destroy({
+            where: {
+                id: req.params.bookId
+            }
+        });
+        res.json(deletedBook);
+    } catch (e) {
+        res.json(e);
+    }
+})
 
 module.exports = router;
